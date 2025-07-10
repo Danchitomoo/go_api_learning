@@ -6,7 +6,7 @@ import (
 	"github.com/Danchitomoo/go_api_learning/models"
 )
 
-func InsertComment(db *sql.DB, articleID int, comment models.Comment) (models.Comment, error) {
+func InsertComment(db *sql.DB, comment models.Comment) (models.Comment, error) {
 	const sqlStr = `
 		insert into comments (article_id, message, created_at) values
 		?, ?, now();
@@ -25,7 +25,7 @@ func InsertComment(db *sql.DB, articleID int, comment models.Comment) (models.Co
 	return newComment, nil
 }
 
-func SelectCommmentList(db *sql.DB, articleID int) ([]models.Comment, error) {
+func SelectCommentList(db *sql.DB, articleID int) ([]models.Comment, error) {
 	const sqlStr = `
 		select * from comments
 		where article_id = ?;
