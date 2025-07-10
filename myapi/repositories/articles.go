@@ -38,7 +38,7 @@ func SelectArticleList(db *sql.DB, page int) ([]models.Article, error) {
 		limit ? offset ?;
 	`
 	rows, err := db.Query(sqlStr, articleNumPerPage, ((page - 1) * articleNumPerPage))
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
@@ -103,7 +103,7 @@ func UpdateNiceNum(db *sql.DB, articleID int) error {
 		return nil
 	}
 
-	_, err = tx.Exec(sqlUpdateNice, (niceNum + 1))
+	_, err = tx.Exec(sqlUpdateNice, (niceNum + 1), articleID)
 	if err != nil {
 		tx.Rollback()
 		return nil
