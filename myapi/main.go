@@ -8,9 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Danchitomoo/go_api_learning/controllers"
-	"github.com/Danchitomoo/go_api_learning/routers"
-	"github.com/Danchitomoo/go_api_learning/services"
+	"github.com/Danchitomoo/go_api_learning/api"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -28,10 +26,7 @@ func main() {
 		log.Println("fail to connect DB")
 		return
 	}
-	ser := services.NewMyAppService(db)
-	con := controllers.NewAppController(ser)
-
-	r := routers.NewRouter(con)
+	r := api.NewRouter(db)
 
 	log.Println("server start at port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r)) //Fatalはerror発生時に強制終了
