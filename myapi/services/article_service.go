@@ -39,14 +39,8 @@ func (s MyAppService) GetArticleListService(page int) ([]models.Article, error) 
 }
 
 func (s MyAppService) PostNiceService(article models.Article) (models.Article, error) {
-	db, err := connectDB()
-	if err != nil {
-		return models.Article{}, err
-	}
-	defer db.Close()
-
 	articleID := article.ID
-	err = repositories.UpdateNiceNum(db, articleID)
+	err := repositories.UpdateNiceNum(s.db, articleID)
 	if err != nil {
 		return models.Article{}, err
 	}
