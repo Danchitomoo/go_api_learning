@@ -75,7 +75,6 @@ func (c *ArticleController) ArticleListHandler(w http.ResponseWriter, req *http.
 		apperrors.ErrorHandler(w, req, err)
 		return
 	}
-
 	json.NewEncoder(w).Encode(articleList)
 }
 
