@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"strconv"
 
 	"github.com/Danchitomoo/go_api_learning/apperrors"
+	"github.com/Danchitomoo/go_api_learning/common"
 	"github.com/Danchitomoo/go_api_learning/controllers/services"
 	"github.com/Danchitomoo/go_api_learning/models"
 	"github.com/gorilla/mux"
@@ -34,6 +36,14 @@ func (c *ArticleController) PostArticleHandler(w http.ResponseWriter, req *http.
 	if err := json.NewDecoder(req.Body).Decode(&reqArticle); err != nil {
 		err = apperrors.ReqBodyDecodeFailed.Wrap(err, "bad request body")
 		apperrors.ErrorHandler(w, req, err)
+	}
+
+	// confirm that the username in req is the same one in authed name.
+	authedUserName := common.GetUserName(req.Context())
+	if reqArticle.UserName != authedUserName {
+		err := apperrors.NotMatchUser.Wrap(errors.New("does not match reqBody user and idtoken user"), "invalid parameter")
+		apperrors.ErrorHandler(w, req, err)
+		return
 	}
 
 	article, err := c.service.PostArticleService(reqArticle)
