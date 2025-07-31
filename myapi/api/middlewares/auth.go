@@ -1,11 +1,14 @@
 package middlewares
 
 import (
+	"context"
+	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/Danchitomoo/go_api_learning/apperrors"
 	"github.com/Danchitomoo/go_api_learning/common"
+	"google.golang.org/api/idtoken"
 )
 
 const (
@@ -31,14 +34,14 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		tokenValidator, err != idtoken.NewValidator(context.Background())
+		tokenValidator, err := idtoken.NewValidator(context.Background())
 		if err != nil {
 			err = apperrors.CannotMakeValidator.Wrap(err, "internal auth error")
 			apperrors.ErrorHandler(w, req, err)
 			return
 		}
 
-		payload, err := tolenValidator.Validate(context.Background(), idToken, googleClientID)
+		payload, err := tokenValidator.Validate(context.Background(), idToken, googleClientID)
 		if err != nil {
 			err = apperrors.Unauthorizated.Wrap(err, "invalid id token")
 			apperrors.ErrorHandler(w, req, err)
