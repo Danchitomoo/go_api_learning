@@ -3,6 +3,8 @@ package middlewares
 import (
 	"log"
 	"net/http"
+
+	"github.com/Danchitomoo/go_api_learning/common"
 )
 
 /*
@@ -35,7 +37,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 		log.Printf("[%d]%s %s \n", traceID, req.RequestURI, req.Method)
 
-		ctx := setTraceID(req.Context(), traceID)
+		ctx := common.SetTraceID(req.Context(), traceID)
 		req = req.WithContext(ctx)
 		rlw := NewResLoggingWriter(w)
 		next.ServeHTTP(rlw, req)
